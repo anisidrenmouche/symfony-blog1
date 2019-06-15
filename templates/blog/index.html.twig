@@ -11,9 +11,9 @@
             <div class="metadata">Ecrit le {{ article.createdAT | date( 'd/m/y') }}12/2019 à 11h40 </div>
             <div class="content"></div>
             <img src="{{ article.image }}" height="360" width="570">
-        {{ article.content }}
+        {{ article.content | raw }}
             <p> ABOUT PALM JUMEIRAH ONE PALM, DUBAI, DUBAI</p>
-            <a href="{{ path('blog_show') }}" class="btn btn-primary"> Lire la suite </a>
+            <a href="{{ path('blog_show', {'id': article.id}) }}" class="btn btn-primary"> Lire la suite </a>
     </article>
     {% endfor %}
 
