@@ -4,12 +4,14 @@
 
 {% block body %}
 <section class="articles">
-    {% for artcile in articles %}
+
+    {% for article in articles %}
     <article>
-            <h2>Appartement de luxe de 8 pièces en vente à La Muette, Auteuil, Porte Dauphine, Paris, Île-de-France</h2>
-            <div class="metadata">Ecrit le 12/2019 à 11h40 </div>
+            <h2>{{ article.title }}</h2>
+            <div class="metadata">Ecrit le {{ article.createdAT | date( 'd/m/y') }}12/2019 à 11h40 </div>
             <div class="content"></div>
-            <img src="https://images.gtsstatic.net/reno/imagereader.aspx?imageurl=http%3A%2F%2Fm.sothebysrealty.com%2F1103i215%2Fqpzjfnk7m24y4v2aqj4ctfkv72i215&option=N&idclient=180&idlisting=180-l-3136-6y25b5&w=1024&permitphotoenlargement=false" height="360" width="570">
+            <img src="{{ article.image }}" height="360" width="570">
+        {{ article.content }}
             <p> ABOUT PALM JUMEIRAH ONE PALM, DUBAI, DUBAI</p>
             <a href="{{ path('blog_show') }}" class="btn btn-primary"> Lire la suite </a>
     </article>
