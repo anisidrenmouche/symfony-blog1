@@ -14,7 +14,15 @@
 
     {{ form_row(formArticle.image, {'attr': {'placeholder': "Image"}}) }}
 
-    <button type="submit" class="btn btn-success">Ajouter un nouvelle article </button>
+    <button type="submit" class="btn btn-success">
+
+        {% if editMode %}
+            Enregistrer
+        {% else %}
+            Ajouter
+        {% endif %}
+    </button>
+
 
     {{ form_end(formArticle) }}
 

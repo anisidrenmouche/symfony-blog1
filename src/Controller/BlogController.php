@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -9,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class BlogController extends AbstractController
 {
@@ -40,24 +42,32 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/blog/new", name="blog_create")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */
 
-    public function create(Request $request, ObjectManager $manager){
+    public function form(Article $article = null, Request $request, ObjectManager $manager){
         $article = new Article();
 
-        $form = $this->createFormBuilder($article)
+        $article->setTitle("")
+            ->setContent("");
+
+        /** $form = $this->createFormBuilder($article)
             ->add ('title')
             ->add ('content')
             ->add ('image')
-             /**->add ('save', SubmitType:: class, [
+             ->add ('save', SubmitType:: class, [
                 'label' => 'Enregister'
-            ])*/
-            ->getForm();
+
+            ->getForm();])*/
+
+        $form = $this->createForm(ArticleType::class, $article);
 
         $article->setCreatedAt(new \DateTime());
         $form->handleRequest($request);
 
             if($form->isSubmitted()&& $form->isValid()){
+                if(!$article->getId())
+                    $article->setCreatedAt(new \DateTime());
 
 
                 $manager->persist($article);
@@ -67,7 +77,8 @@ class BlogController extends AbstractController
 
 
         return $this->render ('blog/create.html.twig', [
-            'formArticle' => $form->createView()
+            'formArticle' => $form->createView(),
+            'editMode' => $article->getId() !== null
         ]);
     }
 
