@@ -46,7 +46,9 @@ class BlogController extends AbstractController
      */
 
     public function form(Article $article = null, Request $request, ObjectManager $manager){
-        $article = new Article();
+        if(!$article){
+            $article = new Article();
+        }
 
         $article->setTitle("")
             ->setContent("");
@@ -78,7 +80,7 @@ class BlogController extends AbstractController
 
         return $this->render ('blog/create.html.twig', [
             'formArticle' => $form->createView(),
-            'editMode' => $article->getId() !== null
+            'editMode' => $article->getId() !==null,
         ]);
     }
 
