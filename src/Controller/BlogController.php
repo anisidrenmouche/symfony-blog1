@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,7 +49,22 @@ class BlogController extends AbstractController
             ->add ('title')
             ->add ('content')
             ->add ('image')
-            -> getForm();
+             /**->add ('save', SubmitType:: class, [
+                'label' => 'Enregister'
+            ])*/
+            ->getForm();
+
+        $article->setCreatedAt(new \DateTime());
+        $form->handleRequest($request);
+
+            if($form->isSubmitted()&& $form->isValid()){
+
+
+                $manager->persist($article);
+                $manager->flush();
+                return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
+            }
+
 
         return $this->render ('blog/create.html.twig', [
             'formArticle' => $form->createView()
