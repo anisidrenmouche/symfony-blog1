@@ -28,6 +28,8 @@ class BlogController extends AbstractController
         ]);
     }
 
+
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -39,6 +41,20 @@ class BlogController extends AbstractController
     {
         return $this->render('blog/home.html.twig');
     }
+
+
+
+    /**
+     * @Route("/blog/apropos", name="blog_apropos")
+     */
+    public function create()
+    {
+        return $this->render('blog/apropos.html.twig');
+    }
+
+
+
+
 
     /**
      * @Route("/blog/new", name="blog_create")
