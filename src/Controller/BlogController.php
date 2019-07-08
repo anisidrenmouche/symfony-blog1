@@ -44,16 +44,23 @@ class BlogController extends AbstractController
 
 
 
+
     /**
-     * @Route("/blog/apropos", name="blog_apropos")
+     *@Route("/blog/apropos", name="blog_apropos")
      */
-    public function create()
+    public function apropos()
     {
         return $this->render('blog/apropos.html.twig');
     }
 
 
-
+    /**
+     *@Route("/blog/contact", name="blog_contact")
+     */
+    public function contact()
+    {
+        return $this->render('blog/contact.html.twig');
+    }
 
 
     /**
