@@ -2,6 +2,8 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
+use App\Entity\Comment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Article;
@@ -10,13 +12,47 @@ class ArticleFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        for($i =1; $i <= 10; $i++){
+        $faker = \Faker\Factory::create('fr_FR');
+
+        // Créer 3 categorie fakees
+        for($i = 1; $i <= 3; $i++){
+            $category = new Category();
+            $category->setTitle($faker->sentence())
+            ->setDescription($faker->paragraph());
+
+            $manager->persist($category);
+
+            //creer entre 4 et 6 articles
+        }
+
+        for($j =1; $j <= mt_rand( 4,6 ); $j++){
             $article = new Article();
-            $article->setTitle("Le titre des artciles n°$i")
-                ->setContent("<p>Contenu de l'article n°$i </p>")
-                ->setImage("https://images.gtsstatic.net/reno/imagereader.aspx?imageurl=http%3A%2F%2Fm.sothebysrealty.com%2F1103i215%2Ftts21f1s904p4da22y7jcv9s93i215&option=N&idclient=180&idlisting=180-l-3136-lxqp5n&w=1024&permitphotoenlargement=false")
-                ->setCreatedAt(new \DateTime());
+
+            $content = '<p>' . join($faker->paragraphs(5), '</p><p>') . '</p>';
+
+            $article->setTitle($faker->sentence())
+                ->setContent($content)
+                ->setImage($faker->imageUrl())
+                ->setCreatedAt($faker->dateTimeBetween('-6 months'))
+                ->setCategory($category);
+
             $manager->persist($article);
+
+            // on donne des commentaires a l'atricle
+            for ($k = 1; $k <= mt_rand(4,10); $k++){
+                $comment = new Comment();
+                $content = '<p>' . join($faker->paragraphs(2), '</p><p>') . '</p>';
+
+
+               $interval = (new \DateTime())->diff($article->getCreatedAt());
+               $days = $interval->days;
+
+                $comment->setAuthor($faker ->name)
+                    ->setContent($content)
+                ->setCreatedAt($faker->dateTimeBetween('-' .$days . 'days'))
+                    ->setArticle($article);
+                $manager->persist($comment);
+            }
         }
         $manager->flush();
     }
